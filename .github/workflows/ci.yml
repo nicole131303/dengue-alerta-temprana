@@ -62,7 +62,7 @@ jobs:
       - name: panel -> features -> auditar -> entrenar -> explicar
         run: python -m dengue_alerta todo --config configs/ci.yaml
       - name: Publicar métricas y figuras como artefacto
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: reportes-ci
           path: reports/
