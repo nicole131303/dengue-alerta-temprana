@@ -1,0 +1,26 @@
+# Se ejecuta automáticamente antes de cada `git commit`.
+# Instalación (una sola vez):  pre-commit install
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files      # evita subir CSV/Parquet por accidente
+        args: ["--maxkb=1024"]
+      - id: check-merge-conflict
+      - id: detect-private-key
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.5.7
+    hooks:
+      - id: ruff                          # linter
+        args: [--fix]
+      - id: ruff-format                   # formateador
+
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.7.1
+    hooks:
+      - id: nbstripout                    # borra salidas de notebooks antes de subirlos
+        exclude: ^notebooks/00_           # el notebook didáctico conserva sus salidas

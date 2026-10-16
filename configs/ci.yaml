@@ -1,0 +1,18 @@
+# Configuración liviana para la integración continua (GitHub Actions).
+# Hereda todo de base.yaml y solo sobrescribe lo necesario para que
+# el pipeline completo corra en ~1 minuto con datos sintéticos.
+hereda: base.yaml
+
+modelado:
+  modelos: [logistica, lightgbm]
+  experimentos:
+    E1_epi: [epidemiologicas]
+    E4_completo: [epidemiologicas, espaciales, climaticas, estructurales]
+  hiperparametros:
+    lightgbm: { n_estimators: 80, learning_rate: 0.08, num_leaves: 15 }
+
+sintetico:
+  n_filas: 4
+  n_columnas: 5
+  anio_inicio: 2014
+  anio_fin: 2023

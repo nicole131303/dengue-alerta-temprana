@@ -1,0 +1,78 @@
+# =====================================================================
+# Configuración base del experimento
+# ---------------------------------------------------------------------
+# REGLA DE ORO: ningún número "mágico" vive dentro del código.
+# Todo parámetro que pueda cambiar (umbrales, fechas de corte, rutas,
+# modelos) se declara aquí. Así, cambiar un experimento = cambiar YAML,
+# y cada resultado queda asociado a la configuración que lo produjo.
+# =====================================================================
+
+proyecto:
+  nombre: dengue-alerta-temprana
+  semilla: 42
+
+# Rutas relativas a la raíz del repositorio
+rutas:
+  raw: data/raw              # datos tal como se descargan (NUNCA se modifican)
+  external: data/external    # fuentes complementarias (clima, ENSO, censo, mapas)
+  interim: data/interim      # salidas intermedias entre módulos
+  processed: data/processed  # dataset final de modelado y predicciones
+  modelos: models            # modelos entrenados (.joblib)
+  reportes: reports          # métricas, figuras, SHAP
+
+# Archivos de entrada (nombres esperados)
+fuentes:
+  minsa_csv: data/raw/vigilancia_dengue.csv
+  clima_csv: data/external/clima_distrital_diario.csv
+  enso_csv: data/external/indices_enso.csv
+  adyacencia_csv: data/external/adyacencia_distritos.csv
+  estructurales_csv: data/external/estructurales_distritales.csv
+  geojson: data/external/distritos.geojson
+
+limpieza:
+  tipos_dx_validos: [C, P]   # confirmado y probable; se excluyen sospechosos (S)
+  altitud_max_m: 2500        # el vector Aedes aegypti rara vez se establece por encima
+
+# Definición operacional de brote (Dostal et al., 2022)
+etiqueta:
+  min_casos: 5               # 5 o más casos...
+  min_semanas: 3             # ...en 3 o más semanas consecutivas con casos
+  gap_cierre: 2              # el episodio termina tras 2 semanas seguidas sin casos
+
+objetivo:
+  horizontes: [2, 4]         # semanas de anticipación de la alerta
+
+# Partición temporal (sin barajar): pasado -> entrenamiento, futuro -> prueba
+particion:
+  fin_train: "2021-12-31"
+  fin_val: "2022-12-31"      # 2023 queda como prueba (año del gran brote del Niño costero)
+
+features:
+  lags_casos: 8              # casos de las semanas t, t-1, ..., t-7
+  lags_clima: [2, 4, 6, 8]   # el clima actúa con retraso (ciclo del mosquito + incubación)
+  rezago_publicacion_enso_meses: 2   # el ICEN del mes m se publica ~2 meses después
+
+modelado:
+  modelos: [logistica, random_forest, lightgbm, xgboost]
+  modelo_explicable: lightgbm      # modelo al que se le calcula SHAP
+  experimento_final: E4_completo
+  k_ranking: 20                    # precisión@k: ¿los k distritos con mayor riesgo tuvieron brote?
+  mlflow: false                    # true para registrar cada corrida en MLflow
+  # Ablación: cada experimento agrega un grupo de variables al anterior
+  experimentos:
+    E1_epi: [epidemiologicas]
+    E2_vecinos: [epidemiologicas, espaciales]
+    E3_clima: [epidemiologicas, espaciales, climaticas]
+    E4_completo: [epidemiologicas, espaciales, climaticas, estructurales]
+  hiperparametros:
+    logistica: { C: 0.5 }
+    random_forest: { n_estimators: 300, min_samples_leaf: 5, max_features: sqrt }
+    lightgbm: { n_estimators: 400, learning_rate: 0.03, num_leaves: 31, min_child_samples: 30, subsample: 0.8, subsample_freq: 1, colsample_bytree: 0.8 }
+    xgboost: { n_estimators: 400, learning_rate: 0.03, max_depth: 5, subsample: 0.8, colsample_bytree: 0.8 }
+
+# Solo para generar datos de prueba con el mismo formato que los reales
+sintetico:
+  n_filas: 8
+  n_columnas: 5              # 8 x 5 = 40 distritos en una grilla (para tener vecinos)
+  anio_inicio: 2010
+  anio_fin: 2023

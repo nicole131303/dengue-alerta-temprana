@@ -1,0 +1,14 @@
+# Análisis de sensibilidad: ¿cambian las conclusiones si el brote exige 4 semanas
+# consecutivas en lugar de 3? Solo se declara lo que cambia respecto a base.yaml.
+# Ejecutar:  python -m dengue_alerta todo --config configs/experimentos/sensibilidad_brote_4semanas.yaml
+hereda: ../base.yaml
+
+etiqueta:
+  min_semanas: 4
+
+# Salidas en carpetas propias para no sobrescribir el experimento principal
+rutas:
+  interim: data/interim/sens_4semanas
+  processed: data/processed/sens_4semanas
+  modelos: models/sens_4semanas
+  reportes: reports/sens_4semanas

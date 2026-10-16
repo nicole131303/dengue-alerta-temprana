@@ -1,0 +1,43 @@
+# ---------- Datos: NUNCA se suben a GitHub ----------
+# (son pesados, algunos tienen restricciones de uso y se pueden regenerar)
+data/raw/*
+data/external/*
+data/interim/*
+data/processed/*
+!data/**/.gitkeep
+!data/README.md
+
+# ---------- Artefactos generados ----------
+models/**
+!models/**/
+!models/**/.gitkeep
+reports/**
+!reports/**/
+!reports/**/.gitkeep
+mlruns/
+mlartifacts/
+optuna*.db
+
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ---------- Entornos ----------
+.venv/
+venv/
+.env
+.python-version
+
+# ---------- Notebooks / editores / SO ----------
+.ipynb_checkpoints/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

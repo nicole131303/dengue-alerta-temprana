@@ -1,0 +1,22 @@
+name: Error
+description: Algo no funciona como debería
+title: "[ERROR] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: que_paso
+    attributes:
+      label: ¿Qué pasó?
+    validations:
+      required: true
+  - type: textarea
+    id: reproducir
+    attributes:
+      label: Comando para reproducirlo
+      render: bash
+      placeholder: python -m dengue_alerta features --config configs/base.yaml
+  - type: textarea
+    id: traza
+    attributes:
+      label: Mensaje de error completo
+      render: text

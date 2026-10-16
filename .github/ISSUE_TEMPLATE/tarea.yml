@@ -1,0 +1,31 @@
+name: Tarea de desarrollo
+description: Una unidad de trabajo de uno de los módulos
+title: "[Módulo X] "
+labels: ["tarea"]
+body:
+  - type: dropdown
+    id: modulo
+    attributes:
+      label: Módulo
+      options:
+        - "1 - Panel y etiqueta de brote"
+        - "2 - Clima y El Niño"
+        - "3 - Vecinos y estructurales"
+        - "4 - Modelado, evaluación y SHAP"
+        - "5 - Tablero"
+        - "Infraestructura / documentación"
+    validations:
+      required: true
+  - type: textarea
+    id: descripcion
+    attributes:
+      label: ¿Qué hay que hacer?
+      placeholder: "Calcular la proporción de vecinos en brote en la semana t..."
+    validations:
+      required: true
+  - type: textarea
+    id: criterio
+    attributes:
+      label: Criterio de aceptación
+      description: ¿Cómo sabremos que está terminado? (idealmente, una prueba automática)
+      placeholder: "- [ ] test_vecinos_... pasa\n- [ ] la auditoría de fuga no detecta cambios"

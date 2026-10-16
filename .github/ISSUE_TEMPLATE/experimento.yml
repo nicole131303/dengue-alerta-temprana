@@ -1,0 +1,26 @@
+name: Experimento
+description: Registrar una hipótesis y su resultado (bitácora de la tesis)
+title: "[EXP] "
+labels: ["experimento"]
+body:
+  - type: textarea
+    id: hipotesis
+    attributes:
+      label: Hipótesis
+      placeholder: "Agregar la lluvia con rezago de 4 semanas mejora la PR-AUC en distritos sin brote hoy"
+    validations:
+      required: true
+  - type: input
+    id: config
+    attributes:
+      label: Archivo de configuración
+      placeholder: configs/experimentos/e3_clima.yaml
+  - type: textarea
+    id: resultado
+    attributes:
+      label: Resultado
+      description: Tabla de métricas, figura o enlace a la corrida de MLflow
+  - type: textarea
+    id: conclusion
+    attributes:
+      label: Conclusión y siguiente paso
